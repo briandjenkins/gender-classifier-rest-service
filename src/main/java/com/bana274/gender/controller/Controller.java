@@ -11,6 +11,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import javax.imageio.ImageIO;
+import org.datavec.image.loader.ImageLoader;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -36,7 +37,7 @@ public class Controller {
 
     @GetMapping("/")
     public String helloWorld() {                
-        return "hello2 ";
+        return "hello v0.3 ";
     }
     
     /**
@@ -52,7 +53,7 @@ public class Controller {
         byte [] content = file.getBytes();
         System.out.println("File (image) size: "+content.length);
         InputStream is = new ByteArrayInputStream(content);
-        BufferedImage imageBI = ImageIO.read(is);
+        BufferedImage imageBI = ImageIO.read(is);       
         INDArray prediction = modelService.classify(imageBI);
         double[] labels = prediction.toDoubleVector();
         String label = (labels[0] == 1 ? "female" : "male");

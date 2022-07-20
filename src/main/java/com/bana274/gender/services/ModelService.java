@@ -57,8 +57,9 @@ public class ModelService {
         final int HEIGHT = 32;
         final int WIDTH = 32;
         final int CHANNELS = 3;
+        final boolean CROP_BEFORE_RESCHALING = true;
                       
-        ImageLoader loader = new ImageLoader(WIDTH, HEIGHT, CHANNELS);        
+        ImageLoader loader = new ImageLoader(WIDTH, HEIGHT, CHANNELS, CROP_BEFORE_RESCHALING);        
         INDArray input = loader.asMatrix(image).reshape(1, 3, 32, 32);
         INDArray output = classifier.output(input);    
         System.out.println(output);
