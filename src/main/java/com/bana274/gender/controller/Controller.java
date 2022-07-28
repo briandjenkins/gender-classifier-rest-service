@@ -11,7 +11,6 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import javax.imageio.ImageIO;
-import org.datavec.image.loader.ImageLoader;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -36,27 +35,28 @@ public class Controller {
     ModelService modelService;
 
     @GetMapping("/")
-    public String helloWorld() {                
-        return "hello v0.3 ";
+    public String helloWorld() {
+        return "hello v0.4 ";
     }
-    
+
     /**
      * Image posted from the client.
-     * 
+     *
      * @param file
      * @return
-     * @throws IOException 
+     * @throws IOException
      */
     @PostMapping("/upload/image")
     public ResponseEntity<ImageUploadResponse> uploadImage(@RequestParam("image") MultipartFile file) throws IOException {
 
-        byte [] content = file.getBytes();
-        System.out.println("File (image) size: "+content.length);
+        byte[] content = file.getBytes();
+        System.out.println("File (image) size: " + content.length);
         InputStream is = new ByteArrayInputStream(content);
-        BufferedImage imageBI = ImageIO.read(is);       
+        BufferedImage imageBI = ImageIO.read(is);
         INDArray prediction = modelService.classify(imageBI);
         double[] labels = prediction.toDoubleVector();
         String label = (labels[0] == 1 ? "female" : "male");
         return ResponseEntity.status(HttpStatus.OK).body(new ImageUploadResponse("Image uploaded successfully: " + file.getOriginalFilename(), label));
     }
+
 }

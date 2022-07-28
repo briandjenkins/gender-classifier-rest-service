@@ -4,6 +4,7 @@
  */
 package com.bana274.gender.services;
 
+import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -13,6 +14,7 @@ import java.util.logging.Logger;
 import org.apache.commons.io.FileUtils;
 import org.datavec.image.loader.ImageLoader;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
+import org.imgscalr.Scalr;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.springframework.stereotype.Service;
 
@@ -58,11 +60,21 @@ public class ModelService {
         final int WIDTH = 32;
         final int CHANNELS = 3;
         final boolean CROP_BEFORE_RESCHALING = true;
+        
+//        System.out.println("Height in pixels: "+image.getHeight());
+//        System.out.println("Width in pixels: "+image.getWidth());
+        
+        BufferedImage scaledImage = Scalr.resize(image, 90, 120);
+        
+//        System.out.println("Height in pixels: "+scaledImage.getHeight());
+//        System.out.println("Width in pixels: "+scaledImage.getWidth());
                       
-        ImageLoader loader = new ImageLoader(WIDTH, HEIGHT, CHANNELS, CROP_BEFORE_RESCHALING);        
-        INDArray input = loader.asMatrix(image).reshape(1, 3, 32, 32);
+        ImageLoader imageLoader = new ImageLoader(WIDTH, HEIGHT, CHANNELS, CROP_BEFORE_RESCHALING);        
+        INDArray input = imageLoader.asMatrix(scaledImage).reshape(1, 3, 32, 32);      
         INDArray output = classifier.output(input);    
         System.out.println(output);
         return output;
     }
+    
+   
 }
