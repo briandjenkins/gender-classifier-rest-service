@@ -36,7 +36,7 @@ public class Controller {
 
     @GetMapping("/")
     public String helloWorld() {
-        return "hello v0.4 ";
+        return "hello v0.5 ";
     }
 
     /**
@@ -49,8 +49,7 @@ public class Controller {
     @PostMapping("/upload/image")
     public ResponseEntity<ImageUploadResponse> uploadImage(@RequestParam("image") MultipartFile file) throws IOException {
 
-        byte[] content = file.getBytes();
-        System.out.println("File (image) size: " + content.length);
+        byte[] content = file.getBytes();      
         InputStream is = new ByteArrayInputStream(content);
         BufferedImage imageBI = ImageIO.read(is);
         INDArray prediction = modelService.classify(imageBI);

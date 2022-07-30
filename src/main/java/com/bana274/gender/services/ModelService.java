@@ -4,7 +4,6 @@
  */
 package com.bana274.gender.services;
 
-import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -25,10 +24,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class ModelService {
 
+    final private Logger logger = Logger.getLogger(ModelService.class.getName());
     private MultiLayerNetwork classifier;
 
-    public ModelService() {
-        System.out.println("Service running...");
+    public ModelService() {        
+        logger.info("Service running...");       
         loadCNNModelFromResources();
     }
 
@@ -43,9 +43,9 @@ public class ModelService {
             FileUtils.copyToFile( inputStream, modelFile );
             classifier = MultiLayerNetwork.load(modelFile, false);
         } catch (IOException ex) {
-            Logger.getLogger(ModelService.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        System.out.println("Model has been loaded.");
+            logger.log(Level.SEVERE, null, ex);           
+        }      
+        logger.info("Model has been loaded.");    
     }
     
     /**
@@ -61,16 +61,16 @@ public class ModelService {
         final int CHANNELS = 3;
         final boolean CROP_BEFORE_RESCHALING = true;
         
-//        System.out.println("Height in pixels: "+image.getHeight());
-//        System.out.println("Width in pixels: "+image.getWidth());
+        System.out.println("Height in pixels: "+image.getHeight());
+        System.out.println("Width in pixels: "+image.getWidth());
         
         BufferedImage scaledImage = Scalr.resize(image, 90, 120);
         
-//        System.out.println("Height in pixels: "+scaledImage.getHeight());
-//        System.out.println("Width in pixels: "+scaledImage.getWidth());
+        System.out.println("Height in pixels: "+scaledImage.getHeight());
+        System.out.println("Width in pixels: "+scaledImage.getWidth());
                       
         ImageLoader imageLoader = new ImageLoader(WIDTH, HEIGHT, CHANNELS, CROP_BEFORE_RESCHALING);        
-        INDArray input = imageLoader.asMatrix(scaledImage).reshape(1, 3, 32, 32);      
+        INDArray input = imageLoader.asMatrix(image).reshape(1, 3, 32, 32);      
         INDArray output = classifier.output(input);    
         System.out.println(output);
         return output;
