@@ -36,7 +36,7 @@ public class Controller {
 
     @GetMapping("/")
     public String helloWorld() {
-        return "hello v0.5 ";
+        return "hello v0.6 ";
     }
 
     /**
